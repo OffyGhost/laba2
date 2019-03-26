@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашняя страница пользователя</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+
+Добро пожаловать снова, {{ user.username }}. <a href="logout">Не Вы?</a><br>
+{% if request.path == '/news/' %}
+Ваша новостная лента
+{%else%}
+<a href="/news/">Ваша новостная лента</a>
+
+<br><br>
+Блок пользователя: {{author}}        {%if author != user %}
+    <form action="/news/" method='post'>
+        {% csrf_token %}
+        <input value="{{author.id}}" hidden>
+
+        {% if not subscribed %}
+        <input value="to_sub_true" hidden>
+        <button name="submit">Подписаться</button>
+        {% else %}
+        <p>Вы подписаны на этого пользователя</p>
+        <input value="to_sub_false" hidden>
+        <button name="submit">Отписаться</button>
+    </form>
+        {% endif %}
+    {%endif%}
+{%endif%}
+<br><br>
+{% for item in all %}
+
+<div class="entity">
+    <div class="entity header">
+        Запись {{item.header}}:  от {{item.author}} {{item.posted_since}}
+        {%if author != user %}
+        <button>Отметить пост как прочитанный</button>
+        {% endif %}
+    </div>
+    <div class="entity content">
+        {{item.content}}
+    </div><br>
+{% endfor %}
+
+    {% if form %}
+    <hr>
+    <p> Добавить новую статью</p>
+    <form action="" method='post'>
+        {% csrf_token %}
+    {{ form.as_p }}
+        <button name="submit">Добавить пост в свой блог</button>
+        </form>
+    {% endif %}
+
+    {% else %}
+<a href="{% url 'login' %}">Для просмотра блога необходимо авторизоваться</a>
+{% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашняя страница пользователя</title>
+</head>
+<body>
+
+{%for item in all%}
+
+<div class="entity">
+    <div class="entity header">
+        {{item.header}}: {{item.author}} от {{item.posted_since}}
+    </div>
+    <div class="entity content">
+        {{item.content}}
+    </div><br>
+{% endfor %}
+
+</div>
+</body>
+</html>
