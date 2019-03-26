@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Домашняя страница пользователя</title>
@@ -7,7 +7,7 @@
 <body>
 {% if user.is_authenticated %}
 
-Добро пожаловать снова, {{ user.username }}. <a href="logout">Не Вы?</a><br>
+Добро пожаловать снова, {{ user.username }}. <a href="/logout/?next=/">Не Вы?</a><br>
 {% if request.path == '/news/' %}
 Ваша новостная лента
 {%else%}
@@ -31,20 +31,33 @@
     {%endif%}
 {%endif%}
 <br><br>
-{% for item in all %}
+{% if all %}
+    {% for item in all %}
 
-<div class="entity">
-    <div class="entity header">
-        Запись {{item.header}}:  от {{item.author}} {{item.posted_since}}
-        {%if author != user %}
-        <button>Отметить пост как прочитанный</button>
-        {% endif %}
-    </div>
-    <div class="entity content">
-        {{item.content}}
-    </div><br>
-{% endfor %}
+    <div class="entity">
+        <div class="entity header">
+            Запись {{item.header}}:  от {{item.author}} {{item.posted_since}}
+            {%if author != user %}
+            <button>Отметить пост как прочитанный</button>
+            {% endif %}
+        </div>
+        <div class="entity content">
+            {{item.content}}
+        </div><br>
+    {% endfor %}
+{%else%}
 
+        <!--
+        <p>Нет подписок! </p>
+        <p>Начать с него?</p>
+        <form action="/news/" method='post'>
+            {% csrf_token %}
+            <input value="{{random_user}}" hidden>
+            <input value="to_sub_true" hidden>
+            <button name="submit">Подписаться</button>
+    </form>
+    -->
+{%endif%}
     {% if form %}
     <hr>
     <p> Добавить новую статью</p>

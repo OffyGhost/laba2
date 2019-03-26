@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, reverse
 from django.views.generic.base import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from tech_blogs_app.models import BlogEntity as Post, BlogSubscribedBy as Subs
-
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from tech_blogs_app.forms import CreatePost
 
 
@@ -11,7 +12,14 @@ class BlogListSelfView(TemplateView):
 
     template_name = 'blog.html'
 
-    # Нужен @login_required для self.request, а не для request
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            current_user = User.objects.get(username=self.request.user)
+        except ObjectDoesNotExist:
+            return redirect('/login/')
+
+        return super(BlogListSelfView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         current_user = User.objects.get(username=self.request.user)
         context = super().get_context_data(**kwargs)
@@ -78,18 +86,25 @@ class NewsListView(TemplateView):
     template_name = 'blog.html'
 
     def get_context_data(self, **kwargs):
-        current_user = User.objects.get(username=self.request.user)
+
         # Выдать все записи, где есть
+        current_user = User.objects.get(username=self.request.user)
         context = super().get_context_data(**kwargs)
         # Или выдать записи, или будет пустая страничка
         context['all'] = []
-        for item in Subs.objects.get(user=current_user).subscribed_by.all():
-            # нельзя использовать метод .append - будет вложенные списки. Вот суммировать списки вот это подходит...
-            context['all'] += Post.objects.filter(author=item)
-            # print(Post.objects.filter(username=item))
-        # У пользователя есть персональная лента новостей, в которой в обратном хронологическом порядке
-        # выводятся посты из блогов, на которые он подписан.
-        context['all'].sort(key=lambda x: x.posted_since, reverse=True)
+        try:
+            # Подписка есть -> выдаю ее
+            current_query = Subs.objects.get(user=current_user).subscribed_by.all()
+            for item in current_query :
+                # нельзя использовать метод .append - будет вложенные списки. Вот суммировать списки вот это подходит...
+                context['all'] += Post.objects.filter(author=item)
+                # print(Post.objects.filter(username=item))
+            # У пользователя есть персональная лента новостей, в которой в обратном хронологическом порядке
+            # выводятся посты из блогов, на которые он подписан.
+            context['all'].sort(key=lambda x: x.posted_since, reverse=True)
+        except ObjectDoesNotExist:
+            # TODO Предложить подписаться на случайного пользоватля
+            pass
         # print(context)
         return context
 

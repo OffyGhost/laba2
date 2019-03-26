@@ -14,15 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from tech_blogs_app.views import *
 from django.contrib.auth import login, logout
 
 urlpatterns = [
     # Стандартный набор - админка, вход и выход для пользователя
     path('admin/', admin.site.urls),
-    re_path(r'^accounts/login/$', login),
-    re_path(r'^accounts/logout/$', logout),
+    path('', include('django.contrib.auth.urls')),
 
     # Получить либо свой блог - без указания SLUG, либо чужого пользователя.
     path('other/<slug:slug>', BlogListView.as_view(), name='foreign_blog'),
