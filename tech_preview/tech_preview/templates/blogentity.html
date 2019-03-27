@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
+{%load static%}
 <head>
     <meta charset="UTF-8">
     <title>Статья {{item.id}}</title>
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
 </head>
+
 <body>
+{% include 'hello_block.html' %}
+{% include 'sub_block.html' %}
 
 
 <div class="entity">
@@ -15,6 +22,6 @@
         {{item.content}}
     </div><br>
 
-
+    <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>

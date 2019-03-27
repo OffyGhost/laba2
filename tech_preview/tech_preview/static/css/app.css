@@ -1,0 +1,22 @@
+.hello_block{
+    background-color: beige;
+    text-align: right
+}
+
+body{
+    font-size: "sans-serif";
+}
+.entity_header{
+    background-color: burlywood;
+    box-shadow: "0px 0px 5px #666";
+    border-radius: 10px;
+    text-align: center;
+    font-size: "sans-serif";
+}
+
+.entity{
+    background-color: bisque;
+    box-shadow: "0px 0px 5px #666";
+    border-radius: 10px;
+    font-size: "sans-serif";
+}

@@ -17,9 +17,14 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from tech_blogs_app.views import *
 from django.contrib.auth import login, logout
+from django.views.generic.base import RedirectView
+
+
+favicon_view = RedirectView.as_view(url='/static/favicon.ico')
 
 urlpatterns = [
-    # Стандартный набор - админка, вход и выход для пользователя
+    # Стандартный набор - админка, вход и выход для пользователя, заглушка
+    re_path(r'favicon\.ico$', favicon_view),
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')),
 
@@ -30,4 +35,6 @@ urlpatterns = [
     path('detail/<int:pk>', BlogDetailView.as_view(), name='blog_detail'),
     # Новостная лента текущего пользователя
     path('news/', NewsListView.as_view(), name='feed'),
+    # Не получилось засунуть JSON запрос в ClassBased View
+    path('api.main/read/get', get_read, name='get_read')
 ]

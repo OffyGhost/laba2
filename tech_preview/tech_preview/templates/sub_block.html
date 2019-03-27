@@ -1,0 +1,13 @@
+<br><br>
+Блок пользователя: {{item.author}} {%if author != user %}
+
+{% if not subscribed %}
+<button name="submit" class="subscribe_on">Подписаться</button>
+{% else %}
+
+<p>Вы подписаны на этого пользователя</p>
+<button name="submit" class="subscribe_off">Отписаться</button>
+{% endif %}
+
+<br><br>
+{% endif %}

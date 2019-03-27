@@ -10,10 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os
+import os, re
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Важно, настройки почты
+# Сервер почты
+EMAIL_HOST_DOMAIN = 'http://localhost:8000'
+'''
+EMAIL_HOST = "myMailServer"
+EMAIL_HOST_USER = "django@myMailServer.rf"
+DEFAULT_FROM_EMAIL = "django@myMailServer.rf"
+# В локальной сети на этом порту не было шифрования, это SMTP
+EMAIL_PORT = 27015
+EMAIL_HOST_PASSWORD = 'password'
+'''
+EMAIL_HOST = "ASD"
+EMAIL_HOST_USER = "django@asd.geo.kr"
+DEFAULT_FROM_EMAIL = "django@geo.kr"
+EMAIL_PORT = 27015
+EMAIL_HOST_PASSWORD = 'qwerty-0'
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,7 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tech_blogs_app'
+    'tech_blogs_app',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +65,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+IGNORABLE_404_URLS = [
+    re.compile(r'^/apple-touch-icon.*\.png$'),
+    re.compile(r'^/favicon\.ico$'),
+    re.compile(r'^/robots\.txt$'),
+    re.compile(r'\.(php|cgi)$'),
+    re.compile(r'^/phpmyadmin/')
 ]
 
 ROOT_URLCONF = 'tech_preview.urls'
@@ -120,3 +145,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(os.path.dirname(__file__), 'static').replace('\\', '/')]
