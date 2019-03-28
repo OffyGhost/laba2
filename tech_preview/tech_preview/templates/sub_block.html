@@ -1,12 +1,13 @@
+<!-- Подписка \ отписка -->
 <br><br>
-Блок пользователя: {{item.author}} {%if author != user %}
+Блог пользователя: {{author}}
+{%if author != current_user %}
 
 {% if not subscribed %}
-<button name="submit" class="subscribe_on">Подписаться</button>
-{% else %}
+    <button name="submit" class="subscribe_on {{author.id}}">Подписаться</button>
+    {% else %}
 
-<p>Вы подписаны на этого пользователя</p>
-<button name="submit" class="subscribe_off">Отписаться</button>
+    <p>Вы подписаны на этого пользователя <button name="submit" class="subscribe_off {{author.id}}">Отписаться</button></p>
 {% endif %}
 
 <br><br>

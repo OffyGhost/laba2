@@ -1,0 +1,10 @@
+<!-- Создать пост  -->
+<hr>
+<div class="create_post">
+    <p> <strong>Добавить новую статью</strong></p>
+    <form action="" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit"><strong>Добавить пост в свой блог</strong></button>
+    </form>
+</div>

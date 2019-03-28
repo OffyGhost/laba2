@@ -1,0 +1,20 @@
+<!-- Целиком из документации -->
+{% if all %}
+<div class="pagination">
+    <span class="step-links">
+        {% if all.has_previous %}
+        <a href="?page=1">&laquo; первая</a>
+        <a href="?page={{ all.previous_page_number }}">пред.</a>
+        {% endif %}
+
+        <span class="current">
+            Стр. {{ all.number }} из {{ all.paginator.num_pages }}.
+        </span>
+
+        {% if all.has_next %}
+        <a href="?page={{ all.next_page_number }}">след.</a>
+        <a href="?page={{ all.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{%endif%}

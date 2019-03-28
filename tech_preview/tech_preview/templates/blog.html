@@ -1,80 +1,60 @@
 <!DOCTYPE html>
-{%load static%}
-<html lang="ru">
-
-<head>
-    <meta charset="UTF-8">
-    <div id="csrfmiddlewaretoken">
-        {% csrf_token %}
-    </div>
-    <title>Домашняя страница пользователя</title>
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
-</head>
+<!-- Это шаблон и блога и новостной ленты -->
+{% include 'head.html' %}
 
 <body>
 
-    <div class='hello_block'>
-    Добро пожаловать снова, {{ user.username }}. <a href="/logout/?next=/">Не Вы?</a><br>
-    </div>
-    {% if request.path == '/news/' %}
-    Ваша новостная лента
-    {%else%}
-    <a href="/news/">Ваша новостная лента</a>
+    {% include 'hello_block.html' %}
 
-    <br><br>
-    Блок пользователя: {{author}} {%if author != user %}
-    {% if not subscribed %}
-    <button name="submit" class="subscribe_on">Подписаться</button>
+    {% if request.path == '/news/' %}
+
+    <!-- Если это ваша новостная лента, то не предлагать подписываться -->
+
     {% else %}
-    <p>Вы подписаны на этого пользователя</p>
-    <button name="submit" class="subscribe_off">Отписаться</button>
+
+    {% include 'sub_block.html' %}
+
     {% endif %}
-    {%endif%}
-    {%endif%}
-    <br><br>
 
     {% if all %}
 
-
+    <!-- Если новостная лента пустая, то предложить подписаться на рандомного пользователя -->
 
     {% for item in all %}
-
-    <div id='{{item.author.id}}' class="entity">
-        <div id='{{item.id}}' class="entity_header">
-            <a href='/detail/{{item.id}}'>Запись</a> {{item.header}}: от {{item.author}} {{item.posted_since}}
-            {%if author != user %}
-            <button class="mark_as_readable">Отметить пост как прочитанный</button>
-            <button class="subscribe_off">Отписаться</button>
-            {% endif %}
-        </div>
-        <div class="entity content">
-            {{item.content}}
+        <div id='{{item.author.id}}' class="entity">
+            <div id='{{item.id}}' class="entity_header">
+                <a href='/detail/{{item.id}}'>Запись</a> {{item.header}}: от <a href="/other/{{item.author}}">
+                    {{item.author}}</a> {{item.posted_since}}
+                {%if author != user %}
+                <button class="mark_as_readable">Отметить пост как прочитанный</button>
+                <button class="subscribe_off {{item.author.id}}">Отписаться</button>
+                {% endif %}
+            </div>
+            <div class="entity content">
+                {{item.content}}
+            </div><br>
         </div><br>
-    </div><br>
     {% endfor %}
-    {%else%}
+
+    {% else %}
+    
+    {% if other %}
     <p>Нет постов из подписок! </p>
     <p>Начать с него?</p>
-    {% for somebody in other %}
-    <div id='{{somebody.id}}' class="entity">
-        <button name="submit" class="subscribe_on">Подписаться на {{somebody}}</button>
-    </div>
-    {% endfor %}
-
-    {%endif%}
-    {% if form %}
-    <hr>
-    <p> Добавить новую статью</p>
-    <form action="" method='post'>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button name="submit">Добавить пост в свой блог</button>
-    </form>
+        {% for somebody in other %}
+        <div id='{{somebody.id}}' class="entity">
+            <button name="submit" class="subscribe_on {{somebody.id}}">Подписаться на {{somebody}}</button>
+        </div>
+        {% endfor %}
     {% endif %}
-    </div>
-    <script src="{% static 'js/app.js' %}"></script>
+    {% endif %}
+
+    {% include 'default_paginator.html' %}
+
+    {% if form %} {% include 'create_post.html' %}  {% endif %}
+
+  
+
 </body>
 
 </html>

@@ -20,3 +20,16 @@ body{
     border-radius: 10px;
     font-size: "sans-serif";
 }
+
+.create_post{
+    border-radius: 10px;
+    background-color: aliceblue;
+    text-align: center;
+}
+
+div{
+    margin:10;
+    width: 75%;
+    align-content: center;
+
+}

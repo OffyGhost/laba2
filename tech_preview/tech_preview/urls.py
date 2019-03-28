@@ -29,9 +29,10 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
 
     # Получить либо свой блог - без указания SLUG, либо чужого пользователя.
-    path('other/<slug:slug>', BlogListView.as_view(), name='foreign_blog'),
+    path('other/<slug:slug>', BlogListSelfView.as_view(), name='blog'),
     # Не оговорено в ТЗ, но тогда не вижу способа подписываться на чужие посты
     path('', BlogListSelfView.as_view(), name='self_blog'),
+    
     path('detail/<int:pk>', BlogDetailView.as_view(), name='blog_detail'),
     # Новостная лента текущего пользователя
     path('news/', NewsListView.as_view(), name='feed'),
